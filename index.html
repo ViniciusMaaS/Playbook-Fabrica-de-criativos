@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#1A1315">
+<title>Sofi — Lingerie & Semijoias</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Outfit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --rose: #C4938A;
+  --rose-light: #D4A99F;
+  --rose-dark: #9E736A;
+  --rose-deep: #7A5A52;
+  --noir: #1A1315;
+  --noir-soft: #2D2528;
+  --blush: #F2E0DC;
+  --blush-light: #FBF3F1;
+  --champagne: #F5EDE8;
+  --off-white: #FAF7F5;
+  --gold: #C9A96E;
+  --warm-gray: #8A7E80;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--noir);
+  color: var(--off-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===== BACKGROUND ===== */
+.bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: radial-gradient(ellipse at 50% 30%, #2D2528 0%, #1A1315 50%, #0D0A0B 100%);
+}
+
+.bg-noise {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  opacity: 0.4;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+}
+
+.bg-glow {
+  position: fixed;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  filter: blur(100px);
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 2s ease;
+}
+
+.bg-glow-1 {
+  top: 10%;
+  left: 20%;
+  background: var(--rose);
+  opacity: 0.06;
+}
+
+.bg-glow-2 {
+  bottom: 20%;
+  right: 10%;
+  background: var(--gold);
+  opacity: 0.04;
+}
+
+/* ===== PARTICLES ===== */
+.particle {
+  position: fixed;
+  width: 3px;
+  height: 3px;
+  background: var(--gold);
+  border-radius: 50%;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0;
+  animation: float-up linear infinite;
+}
+
+@keyframes float-up {
+  0% { transform: translateY(0) translateX(0); opacity: 0; }
+  10% { opacity: 0.4; }
+  90% { opacity: 0.2; }
+  100% { transform: translateY(-100vh) translateX(30px); opacity: 0; }
+}
+
+/* ===== MAIN CONTAINER ===== */
+.container {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 420px;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+  text-align: center;
+}
+
+/* ===== LOGO ===== */
+.logo {
+  opacity: 0;
+  animation: fadeSlideUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+}
+
+.logo-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-style: italic;
+  font-size: 52px;
+  color: var(--rose-light);
+  letter-spacing: 2px;
+  position: relative;
+  display: inline-block;
+}
+
+.logo-diamond {
+  position: absolute;
+  top: 6px;
+  right: -2px;
+  width: 8px;
+  height: 8px;
+  border: 1.5px solid var(--rose-light);
+  transform: rotate(45deg);
+  opacity: 0.7;
+}
+
+.logo-tagline {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 300;
+  font-size: 10px;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: var(--warm-gray);
+  margin-top: 6px;
+  opacity: 0;
+  animation: fadeIn 1s ease 1s forwards;
+}
+
+/* ===== GIFT BOX ===== */
+.gift-section {
+  margin: 40px 0 20px;
+  perspective: 800px;
+  opacity: 0;
+  animation: fadeSlideUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.8s forwards;
+}
+
+.gift-box {
+  position: relative;
+  width: 220px;
+  height: 200px;
+  margin: 0 auto;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.gift-box:hover { transform: scale(1.03); }
+.gift-box:active { transform: scale(0.98); }
+
+/* Box body */
+.box-body {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 220px;
+  height: 140px;
+  background: linear-gradient(145deg, var(--rose), var(--rose-dark));
+  border-radius: 6px;
+  box-shadow: 
+    0 20px 60px rgba(0,0,0,0.5),
+    inset 0 1px 0 rgba(255,255,255,0.15),
+    inset 0 -2px 0 rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+.box-body::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 47%, rgba(255,255,255,0.08) 48%, rgba(255,255,255,0.08) 52%, transparent 53%);
+}
+
+.box-body::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+  animation: shimmer-box 4s ease-in-out infinite;
+}
+
+@keyframes shimmer-box {
+  0%, 100% { left: -100%; }
+  50% { left: 140%; }
+}
+
+/* Ribbon vertical */
+.ribbon-v {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 24px;
+  margin-left: -12px;
+  background: linear-gradient(180deg, var(--gold), #B8963E);
+  z-index: 2;
+  box-shadow: inset 0 0 4px rgba(0,0,0,0.1);
+}
+
+.ribbon-v::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+}
+
+/* Box lid */
+.box-lid {
+  position: absolute;
+  top: 0;
+  left: -6px;
+  width: 232px;
+  height: 52px;
+  background: linear-gradient(145deg, var(--rose-light), var(--rose));
+  border-radius: 6px 6px 2px 2px;
+  transform-origin: top center;
+  transition: transform 1.2s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.8s ease 0.6s;
+  z-index: 5;
+  box-shadow: 
+    0 4px 20px rgba(0,0,0,0.3),
+    inset 0 1px 0 rgba(255,255,255,0.2);
+}
+
+.box-lid::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 24px;
+  margin-left: -12px;
+  background: linear-gradient(180deg, var(--gold), #B8963E);
+  box-shadow: inset 0 0 4px rgba(0,0,0,0.1);
+}
+
+.box-lid::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 24px;
+  margin-left: -12px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+}
+
+/* Bow */
+.bow {
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 6;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.bow-loop {
+  width: 80px;
+  height: 40px;
+  position: relative;
+}
+
+.bow-loop::before,
+.bow-loop::after {
+  content: '';
+  position: absolute;
+  top: 5px;
+  width: 36px;
+  height: 30px;
+  border-radius: 50% 50% 50% 50%;
+  background: linear-gradient(135deg, var(--gold), #D4A030);
+  box-shadow: inset 0 -2px 4px rgba(0,0,0,0.15), 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.bow-loop::before {
+  left: 2px;
+  transform: rotate(-15deg);
+}
+
+.bow-loop::after {
+  right: 2px;
+  transform: rotate(15deg);
+}
+
+.bow-center {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 16px;
+  height: 16px;
+  background: linear-gradient(135deg, #D4A030, var(--gold));
+  border-radius: 50%;
+  z-index: 2;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.bow-tail-l,
+.bow-tail-r {
+  position: absolute;
+  bottom: -8px;
+  width: 14px;
+  height: 20px;
+  background: linear-gradient(180deg, var(--gold), #B8963E);
+  z-index: 1;
+}
+
+.bow-tail-l {
+  left: 22px;
+  transform: rotate(15deg) skewX(-5deg);
+  border-radius: 0 0 2px 6px;
+}
+
+.bow-tail-r {
+  right: 22px;
+  transform: rotate(-15deg) skewX(5deg);
+  border-radius: 0 0 6px 2px;
+}
+
+/* Glow ring on box */
+.box-glow {
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 180px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--rose);
+  filter: blur(30px);
+  opacity: 0.2;
+  z-index: 0;
+}
+
+/* ===== OPENED STATE ===== */
+.gift-box.opened .box-lid {
+  transform: rotateX(-130deg) translateY(-20px);
+  opacity: 0;
+}
+
+.gift-box.opened .bow {
+  opacity: 0;
+  transform: translateX(-50%) scale(0.5) translateY(-20px);
+}
+
+/* ===== CTA TEXT ===== */
+.cta-touch {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 300;
+  font-size: 13px;
+  color: var(--rose-light);
+  letter-spacing: 2px;
+  margin-top: 24px;
+  opacity: 0;
+  animation: fadeIn 1s ease 1.5s forwards, pulse-text 2.5s ease-in-out 2.5s infinite;
+}
+
+@keyframes pulse-text {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+/* ===== REVEALED CONTENT ===== */
+.revealed {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 30px;
+}
+
+.revealed.show {
+  display: flex;
+}
+
+.reveal-surprise {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-style: italic;
+  font-size: 42px;
+  color: white;
+  text-shadow: 0 0 40px rgba(196,147,138,0.4);
+  opacity: 0;
+  animation: fadeScaleIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+}
+
+.reveal-message {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-style: italic;
+  font-size: 18px;
+  color: var(--blush);
+  line-height: 1.7;
+  max-width: 300px;
+  margin-top: 16px;
+  opacity: 0;
+  animation: fadeSlideUp 0.8s ease 0.6s forwards;
+}
+
+.reveal-line {
+  width: 50px;
+  height: 1px;
+  background: var(--rose);
+  margin: 24px 0;
+  opacity: 0;
+  animation: fadeIn 0.6s ease 1s forwards;
+}
+
+/* ===== WHATSAPP BUTTON ===== */
+.btn-whatsapp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px 36px;
+  background: linear-gradient(135deg, var(--rose), var(--rose-dark));
+  color: white;
+  text-decoration: none;
+  border: none;
+  border-radius: 50px;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 500;
+  font-size: 15px;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  opacity: 0;
+  animation: fadeScaleIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) 1.3s forwards;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 8px 30px rgba(196,147,138,0.3);
+  position: relative;
+  overflow: hidden;
+  min-width: 280px;
+}
+
+.btn-whatsapp::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+  transition: left 0.6s ease;
+}
+
+.btn-whatsapp:hover::before,
+.btn-whatsapp:active::before {
+  left: 140%;
+}
+
+.btn-whatsapp:hover {
+  transform: scale(1.04);
+  box-shadow: 0 12px 40px rgba(196,147,138,0.45);
+}
+
+.btn-whatsapp:active {
+  transform: scale(0.98);
+}
+
+.btn-whatsapp svg {
+  flex-shrink: 0;
+}
+
+/* Pulse animation after appearing */
+.btn-whatsapp.pulse {
+  animation: btn-pulse 2.5s ease-in-out infinite;
+}
+
+@keyframes btn-pulse {
+  0%, 100% { box-shadow: 0 8px 30px rgba(196,147,138,0.3); }
+  50% { box-shadow: 0 12px 40px rgba(196,147,138,0.5); }
+}
+
+/* ===== FOOTER TEXT ===== */
+.reveal-footer {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 300;
+  font-size: 11px;
+  color: var(--warm-gray);
+  letter-spacing: 2px;
+  margin-top: 24px;
+  opacity: 0;
+  animation: fadeIn 0.6s ease 1.8s forwards;
+}
+
+.reveal-seal {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 32px;
+  opacity: 0;
+  animation: fadeIn 0.6s ease 2.2s forwards;
+}
+
+.seal-diamond {
+  width: 8px;
+  height: 8px;
+  border: 1px solid var(--rose);
+  transform: rotate(45deg);
+  opacity: 0.4;
+}
+
+.seal-text {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 300;
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--warm-gray);
+  opacity: 0.5;
+}
+
+/* ===== CONFETTI ===== */
+.confetti-piece {
+  position: fixed;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0;
+}
+
+/* ===== CORNER ACCENTS ===== */
+.corner {
+  position: fixed;
+  width: 40px;
+  height: 40px;
+  z-index: 5;
+  opacity: 0;
+  animation: fadeIn 1s ease 1.2s forwards;
+}
+
+.corner-tl { top: 16px; left: 16px; border-top: 1px solid rgba(196,147,138,0.2); border-left: 1px solid rgba(196,147,138,0.2); }
+.corner-tr { top: 16px; right: 16px; border-top: 1px solid rgba(196,147,138,0.2); border-right: 1px solid rgba(196,147,138,0.2); }
+.corner-bl { bottom: 16px; left: 16px; border-bottom: 1px solid rgba(196,147,138,0.2); border-left: 1px solid rgba(196,147,138,0.2); }
+.corner-br { bottom: 16px; right: 16px; border-bottom: 1px solid rgba(196,147,138,0.2); border-right: 1px solid rgba(196,147,138,0.2); }
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeScaleIn {
+  from { opacity: 0; transform: scale(0.85); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-height: 700px) {
+  .gift-box { width: 180px; height: 170px; }
+  .box-body { width: 180px; height: 115px; }
+  .box-lid { width: 192px; left: -6px; height: 46px; }
+  .ribbon-v { width: 20px; margin-left: -10px; }
+  .box-lid::before, .box-lid::after { width: 20px; margin-left: -10px; }
+  .logo-text { font-size: 42px; }
+  .gift-section { margin: 28px 0 14px; }
+  .reveal-surprise { font-size: 34px; }
+  .reveal-message { font-size: 16px; }
+}
+
+@media (max-width: 360px) {
+  .container { padding: 30px 16px; }
+  .btn-whatsapp { min-width: 250px; padding: 14px 28px; font-size: 14px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Background -->
+<div class="bg"></div>
+<div class="bg-noise"></div>
+<div class="bg-glow bg-glow-1"></div>
+<div class="bg-glow bg-glow-2"></div>
+
+<!-- Corner accents -->
+<div class="corner corner-tl"></div>
+<div class="corner corner-tr"></div>
+<div class="corner corner-bl"></div>
+<div class="corner corner-br"></div>
+
+<!-- Main -->
+<div class="container">
+  
+  <!-- Logo -->
+  <div class="logo">
+    <div class="logo-text">
+      sofi
+      <div class="logo-diamond"></div>
+    </div>
+    <div class="logo-tagline">Lingerie & Semijoias</div>
+  </div>
+
+  <!-- Gift Box -->
+  <div class="gift-section">
+    <div class="gift-box" id="giftBox" onclick="openGift()">
+      <div class="box-glow"></div>
+      <div class="bow">
+        <div class="bow-loop">
+          <div class="bow-center"></div>
+          <div class="bow-tail-l"></div>
+          <div class="bow-tail-r"></div>
+        </div>
+      </div>
+      <div class="box-lid"></div>
+      <div class="box-body">
+        <div class="ribbon-v"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA before open -->
+  <div class="cta-touch" id="ctaTouch">Toque para abrir seu presente ✦</div>
+
+  <!-- Revealed content -->
+  <div class="revealed" id="revealed">
+    <div class="reveal-surprise">Surpresa! 💝</div>
+    <div class="reveal-message">
+      Você acaba de abrir algo especial.<br>
+      Conheça as peças que vão fazer você brilhar — lingerie que abraça e semijoias que encantam.
+    </div>
+    <div class="reveal-line"></div>
+    <a href="https://wa.me/5519993783452?text=Oi%20Sofi!%20Acabei%20de%20abrir%20meu%20presente%20e%20quero%20conhecer%20as%20pe%C3%A7as%20exclusivas%20%F0%9F%92%96" 
+       class="btn-whatsapp" id="btnWpp" target="_blank" rel="noopener">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+      </svg>
+      Quero conhecer as peças ♡
+    </a>
+    <div class="reveal-footer">Atendimento exclusivo e personalizado ✦</div>
+    <div class="reveal-seal">
+      <div class="seal-diamond"></div>
+      <span class="seal-text">sofi · 2026</span>
+      <div class="seal-diamond"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ===== FLOATING PARTICLES =====
+function createParticles() {
+  const count = 25;
+  for (let i = 0; i < count; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = Math.random() * 100 + 'vw';
+    p.style.width = (2 + Math.random() * 2) + 'px';
+    p.style.height = p.style.width;
+    p.style.animationDuration = (8 + Math.random() * 12) + 's';
+    p.style.animationDelay = (Math.random() * 10) + 's';
+    p.style.opacity = 0;
+    const colors = ['#C9A96E', '#D4A99F', '#C4938A', '#E0BDB6'];
+    p.style.background = colors[Math.floor(Math.random() * colors.length)];
+    document.body.appendChild(p);
+  }
+}
+createParticles();
+
+// ===== CONFETTI =====
+function launchConfetti() {
+  const colors = ['#C4938A', '#D4A99F', '#C9A96E', '#F2E0DC', '#E0BDB6', '#B8963E'];
+  const shapes = ['heart', 'star', 'circle', 'diamond'];
+  const count = 100;
+
+  for (let i = 0; i < count; i++) {
+    const el = document.createElement('div');
+    el.className = 'confetti-piece';
+    
+    const shape = shapes[Math.floor(Math.random() * shapes.length)];
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    const size = 6 + Math.random() * 10;
+    
+    if (shape === 'heart') {
+      el.innerHTML = `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="${color}"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`;
+    } else if (shape === 'star') {
+      el.innerHTML = `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="${color}"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`;
+    } else if (shape === 'diamond') {
+      el.innerHTML = `<div style="width:${size*0.7}px;height:${size*0.7}px;background:${color};transform:rotate(45deg);"></div>`;
+    } else {
+      el.style.width = size + 'px';
+      el.style.height = size + 'px';
+      el.style.borderRadius = '50%';
+      el.style.background = color;
+    }
+    
+    const startX = window.innerWidth / 2 + (Math.random() - 0.5) * 100;
+    const startY = window.innerHeight * 0.4;
+    
+    el.style.left = startX + 'px';
+    el.style.top = startY + 'px';
+    
+    document.body.appendChild(el);
+    
+    const angle = (Math.random() - 0.5) * Math.PI;
+    const velocity = 4 + Math.random() * 8;
+    const vx = Math.sin(angle) * velocity;
+    const vy = -(3 + Math.random() * 6);
+    const rotSpeed = (Math.random() - 0.5) * 15;
+    
+    let x = startX, y = startY, rot = 0, opa = 1, gravity = 0.12;
+    let dx = vx, dy = vy;
+    
+    const delay = Math.random() * 300;
+    
+    setTimeout(() => {
+      el.style.opacity = 1;
+      function animate() {
+        dy += gravity;
+        x += dx;
+        y += dy;
+        rot += rotSpeed;
+        dx *= 0.99;
+        
+        if (y > window.innerHeight + 50) {
+          el.remove();
+          return;
+        }
+        
+        if (y > window.innerHeight * 0.7) {
+          opa -= 0.02;
+        }
+        
+        el.style.left = x + 'px';
+        el.style.top = y + 'px';
+        el.style.transform = `rotate(${rot}deg)`;
+        el.style.opacity = Math.max(0, opa);
+        
+        if (opa > 0) requestAnimationFrame(animate);
+        else el.remove();
+      }
+      requestAnimationFrame(animate);
+    }, delay);
+  }
+}
+
+// ===== OPEN GIFT =====
+let opened = false;
+
+function openGift() {
+  if (opened) return;
+  opened = true;
+  
+  const box = document.getElementById('giftBox');
+  const cta = document.getElementById('ctaTouch');
+  const revealed = document.getElementById('revealed');
+  const btn = document.getElementById('btnWpp');
+  
+  // Open the lid
+  box.classList.add('opened');
+  
+  // Hide CTA text
+  cta.style.transition = 'opacity 0.4s ease';
+  cta.style.opacity = '0';
+  
+  // Launch confetti
+  setTimeout(() => launchConfetti(), 400);
+  
+  // Shrink box and show content
+  setTimeout(() => {
+    box.style.transition = 'transform 0.8s ease, opacity 0.8s ease';
+    box.style.transform = 'scale(0.6) translateY(-20px)';
+    box.style.opacity = '0.3';
+    
+    setTimeout(() => {
+      box.style.display = 'none';
+      cta.style.display = 'none';
+      revealed.classList.add('show');
+      
+      // Start button pulse after it appears
+      setTimeout(() => {
+        btn.classList.add('pulse');
+      }, 2000);
+    }, 600);
+  }, 1200);
+}
+</script>
+
+</body>
+</html>
